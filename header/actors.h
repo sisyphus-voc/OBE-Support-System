@@ -2,6 +2,7 @@
 #include <vector>
 #include "tasks.h"
 
+
 using namespace std;
 
 class User
@@ -9,11 +10,11 @@ class User
 private:
     string userName;
     string password;
-    string name;
+   
 
 public:
     // constructor
-    User(string, string, string);
+    User(string, string);
 
     // setters
     void setUserName(string);
@@ -29,6 +30,7 @@ public:
 class AcademicOfficer : public User
 {
 private:
+    string Officername;
 public:
     // constructor
     AcademicOfficer();
@@ -66,7 +68,9 @@ public:
 class Teacher : public User
 {
 private:
-    string Department;
+    string teacherName;
+    string department;
+    long long int phoneNumber;
 
 public:
     // constructor
