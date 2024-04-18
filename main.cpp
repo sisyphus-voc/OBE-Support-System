@@ -77,7 +77,7 @@ private:
     string department;
     long long int phoneNumber;
     int noOfCourses;
-    vector<Course>* courses;
+    vector<Course*> courses;
 
 public:
     // Constructors
@@ -86,11 +86,12 @@ public:
         teacherName[0] = '\0';
         department[0] = '\0';
         phoneNumber = 0;
-        noOfCourses = 0;
-        courses = 0;
+        courses[0]=NULL;
+        noOfCourses = courses.size();
+        
     }
     Teacher(string newName, string newPassword, string newTeacherName, string newDepartment,
-            long long int newPhoneNumber, int noOfCourses, int *newCourseCode) : User(newName, newPassword)
+            long long int newPhoneNumber, int noOfCourses,  vector<Course*> newCourse) : User(newName, newPassword)
     {
         teacherName = newTeacherName;
         department = newDepartment;
@@ -169,8 +170,6 @@ public:
     }
     // operator overloading
     friend ostream &operator<<(ostream &out, const Teacher &newTeacher);
-    friend ostream &operator<<(ostream &out, const Teacher &newTeacher);
-    // friend istream& operator >> (istream& in, const Teacher& newTeacher);
 };
 ostream &operator<<(ostream &out, Teacher &newTeacher)
 {
@@ -226,17 +225,20 @@ class Program
 private:
     string programCode;
     string programName;
+    vector<PLO> plo;
 public:
     Program()
     {
         programCode[0]=NULL;
         programName[0]=NULL;
+        plo= NULL;
 
     }
-    Program(string  progCode, string progName)
+    Program(string  progCode, string progName,vector<PLO> newPLO)
     {
         programCode = progCode;
         programName = progName;
+        plo = new vector<PLO>(newPLO);
     }
     ~Program();
 
@@ -261,6 +263,9 @@ public:
     {
 
     }
+    //operator overloading
+    friend ostream& operator<< (ostream &output, const Program &prog);
+
 };
 
 class Course
@@ -268,6 +273,9 @@ class Course
 private:
     string courseCode;
     string courseName;
+    string topicName;
+    PLO plo;
+    vector<Question> question;
 public:
     Course()
     {
@@ -365,6 +373,89 @@ CLO::CLO(/* args */)
 CLO::~CLO()
 {
 }
+
+class Question{
+    private:
+        string  questionText;
+        CLO testedCLO;
+    public:
+        Question()
+        {
+            questionText[0]=NULL;
+        }
+        Question(string text, CLO clo){questionText=text;testedCLO=clo;}
+
+        //setters
+        void setQuestionText(string t){questionText =t;}
+        void setTestedCLO(CLO c){testedCLO=c;}
+        
+        //getter
+        string getQuestionText(){return questionText;}
+        CLO getTestedCLO(){return testedCLO;}
+
+};
+
+class Evalutation{
+    private:
+        string evaluationType;
+        vector<CLO> relatedClos;
+        vector<Question> questions;
+    public:
+        Evalutation()
+        {
+            evaluationType[0]=NULL;
+        }
+
+        Evalutation(string type,vector<CLO> clos,vector<Question> quest)
+        {
+            evaluationType=type;
+            relatedClos=clos;
+            questions=quest;
+        }
+
+        //setters
+        void setEvaluationType(string eType){evaluationType=eType;}
+        void setRelatedClo(vector<CLO> clo){relatedClos=clo;}
+        void setQuestions(vector<Question> que){questions=que;}
+
+        //getters
+        string getEvaluationType(){return evaluationType;}
+        vector<CLO> getRelatedCLOStructures(){return relatedClos;}
+        int getNumberOfQuestions(){return questions.size();}
+        vector<Question> getQuestions(){return questions;}
+
+        //add functions
+        void addClo(CLO clo) 
+        { 
+            relatedClos.push_back(clo);  
+        } 
+        //remove clo by being given a clo
+        bool removeClo(CLO clo)  
+        {  
+            for(int i = 0; i < relatedClos.size(); ++i)   
+            {  
+                if(relatedClos[i]==clo)    
+                {    
+                    relatedClos.erase(relatedClos.begin() + i);  
+                    return true;    
+                }   
+            }        
+            return false;    
+        };  
+        
+        //update clo by using the cloCode of  the clo to find it in the list and then updating that clo with the new one
+        bool updateCLO()
+         
+
+        void addQuestionToQuestionsList(Question que)
+        {
+            questions.push_back(que);
+        }
+
+};
+
+
+
 
 /*********************************************FILE FUNCTIONS************************************************/
 
