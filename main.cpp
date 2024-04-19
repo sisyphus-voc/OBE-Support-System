@@ -77,7 +77,7 @@ private:
     string department;
     long long int phoneNumber;
     int noOfCourses;
-    vector<Course*> courses;
+    vector<Course *> courses;
 
 public:
     // Constructors
@@ -86,12 +86,11 @@ public:
         teacherName[0] = '\0';
         department[0] = '\0';
         phoneNumber = 0;
-        courses[0]=NULL;
+        courses[0] = NULL;
         noOfCourses = courses.size();
-        
     }
     Teacher(string newName, string newPassword, string newTeacherName, string newDepartment,
-            long long int newPhoneNumber, int noOfCourses,  vector<Course*> newCourse) : User(newName, newPassword)
+            long long int newPhoneNumber, int noOfCourses, vector<Course *> newCourse) : User(newName, newPassword)
     {
         teacherName = newTeacherName;
         department = newDepartment;
@@ -226,15 +225,15 @@ private:
     string programCode;
     string programName;
     vector<PLO> plo;
+
 public:
     Program()
     {
-        programCode[0]=NULL;
-        programName[0]=NULL;
-        plo= NULL;
-
+        programCode[0] = NULL;
+        programName[0] = NULL;
+        plo = NULL;
     }
-    Program(string  progCode, string progName,vector<PLO> newPLO)
+    Program(string progCode, string progName, vector<PLO> newPLO)
     {
         programCode = progCode;
         programName = progName;
@@ -242,30 +241,26 @@ public:
     }
     ~Program();
 
-    //setters
-    void SetProgramCode(string code){programCode=code;}
-    void SetProgramName(string name){programName=name;}
+    // setters
+    void SetProgramCode(string code) { programCode = code; }
+    void SetProgramName(string name) { programName = name; }
 
-    //getters
-    string GetProgramCode(){return programCode;}
-    string GetProgramName(){return programName;}
+    // getters
+    string GetProgramCode() { return programCode; }
+    string GetProgramName() { return programName; }
 
-    //Member Functions
+    // Member Functions
     void AddPLO(PLO plo)
     {
-
     }
     void RemovePLO(PLO plo)
     {
-
     }
     void UpdatePLO(PLO plo)
     {
-
     }
-    //operator overloading
-    friend ostream& operator<< (ostream &output, const Program &prog);
-
+    // operator overloading
+    friend ostream &operator<<(ostream &output, const Program &prog);
 };
 
 class Course
@@ -276,86 +271,77 @@ private:
     string topicName;
     PLO plo;
     vector<Question> question;
+
 public:
     Course()
     {
-        courseCode[0]=NULL;
-        courseName[0]=NULL;
-
+        courseCode[0] = NULL;
+        courseName[0] = NULL;
     }
-    Course(string  cCode, string cName)
+    Course(string cCode, string cName)
     {
         courseCode = cCode;
         courseName = cName;
     }
     ~Course();
 
-    //setters
-    void SetCourseCode(string code){courseCode=code;}
-    void SetCourseName(string name){courseName=name;}
+    // setters
+    void SetCourseCode(string code) { courseCode = code; }
+    void SetCourseName(string name) { courseName = name; }
 
-    //getters
-    string GetCourseCode(){return courseCode;}
-    string GetCourseName(){return courseName;}
+    // getters
+    string GetCourseCode() { return courseCode; }
+    string GetCourseName() { return courseName; }
 
-    //Member Functions
+    // Member Functions
     void AddCLO(CLO plo)
     {
-
     }
     void RemoveCLO(CLO plo)
     {
-
     }
     void UpdateCLO(CLO plo)
     {
-
     }
 };
-
 
 class PLO
 {
     string ploCode;
     string ploDescription;
+
 public:
     PLO()
     {
-        ploCode[0]=NULL;
-        ploDescription[0]=NULL;
-
+        ploCode[0] = NULL;
+        ploDescription[0] = NULL;
     }
-    PLO(string  plCode, string plName)
+    PLO(string plCode, string plName)
     {
         ploCode = plCode;
         ploDescription = plName;
     }
     ~PLO();
 
-    //setters
-    void SetPLOCode(string code){ploCode=code;}
-    void SetPLODesc(string desc){ploDescription=desc;}
+    // setters
+    void SetPLOCode(string code) { ploCode = code; }
+    void SetPLODesc(string desc) { ploDescription = desc; }
 
-    //getters
-    string GetPLOCode(){return ploCode;}
-    string GetPLODesc(){return ploDescription;}
+    // getters
+    string GetPLOCode() { return ploCode; }
+    string GetPLODesc() { return ploDescription; }
 
-    //Member Functions
+    // Member Functions
     void AddCLO(CLO plo)
     {
-
     }
     void RemoveCLO(CLO plo)
     {
-
     }
     void UpdateCLO(CLO plo)
     {
-
     }
 };
-
-
 
 class CLO
 {
@@ -374,88 +360,90 @@ CLO::~CLO()
 {
 }
 
-class Question{
-    private:
-        string  questionText;
-        CLO testedCLO;
-    public:
-        Question()
-        {
-            questionText[0]=NULL;
-        }
-        Question(string text, CLO clo){questionText=text;testedCLO=clo;}
+class Question
+{
+private:
+    string questionText;
+    CLO testedCLO;
 
-        //setters
-        void setQuestionText(string t){questionText =t;}
-        void setTestedCLO(CLO c){testedCLO=c;}
-        
-        //getter
-        string getQuestionText(){return questionText;}
-        CLO getTestedCLO(){return testedCLO;}
+public:
+    Question()
+    {
+        questionText[0] = NULL;
+    }
+    Question(string text, CLO clo)
+    {
+        questionText = text;
+        testedCLO = clo;
+    }
 
+    // setters
+    void setQuestionText(string t) { questionText = t; }
+    void setTestedCLO(CLO c) { testedCLO = c; }
+
+    // getter
+    string getQuestionText() { return questionText; }
+    CLO getTestedCLO() { return testedCLO; }
 };
 
-class Evalutation{
-    private:
-        string evaluationType;
-        vector<CLO> relatedClos;
-        vector<Question> questions;
-    public:
-        Evalutation()
+class Evalutation
+{
+private:
+    string evaluationType;
+    vector<CLO> relatedClos;
+    vector<Question> questions;
+
+public:
+    Evalutation()
+    {
+        evaluationType[0] = NULL;
+    }
+
+    Evalutation(string type, vector<CLO> clos, vector<Question> quest)
+    {
+        evaluationType = type;
+        relatedClos = clos;
+        questions = quest;
+    }
+
+    // setters
+    void setEvaluationType(string eType) { evaluationType = eType; }
+    void setRelatedClo(vector<CLO> clo) { relatedClos = clo; }
+    void setQuestions(vector<Question> que) { questions = que; }
+
+    // getters
+    string getEvaluationType() { return evaluationType; }
+    vector<CLO> getRelatedCLOStructures() { return relatedClos; }
+    int getNumberOfQuestions() { return questions.size(); }
+    vector<Question> getQuestions() { return questions; }
+
+    // add functions
+    void addClo(CLO clo)
+    {
+        relatedClos.push_back(clo);
+    }
+    // remove clo by being given a clo
+    bool removeClo(CLO clo)
+    {
+        for (int i = 0; i < relatedClos.size(); ++i)
         {
-            evaluationType[0]=NULL;
+            if (relatedClos[i] == clo)
+            {
+                relatedClos.erase(relatedClos.begin() + i);
+                return true;
+            }
         }
+        return false;
+    };
 
-        Evalutation(string type,vector<CLO> clos,vector<Question> quest)
-        {
-            evaluationType=type;
-            relatedClos=clos;
-            questions=quest;
-        }
-
-        //setters
-        void setEvaluationType(string eType){evaluationType=eType;}
-        void setRelatedClo(vector<CLO> clo){relatedClos=clo;}
-        void setQuestions(vector<Question> que){questions=que;}
-
-        //getters
-        string getEvaluationType(){return evaluationType;}
-        vector<CLO> getRelatedCLOStructures(){return relatedClos;}
-        int getNumberOfQuestions(){return questions.size();}
-        vector<Question> getQuestions(){return questions;}
-
-        //add functions
-        void addClo(CLO clo) 
-        { 
-            relatedClos.push_back(clo);  
-        } 
-        //remove clo by being given a clo
-        bool removeClo(CLO clo)  
-        {  
-            for(int i = 0; i < relatedClos.size(); ++i)   
-            {  
-                if(relatedClos[i]==clo)    
-                {    
-                    relatedClos.erase(relatedClos.begin() + i);  
-                    return true;    
-                }   
-            }        
-            return false;    
-        };  
-        
-        //update clo by using the cloCode of  the clo to find it in the list and then updating that clo with the new one
-        bool updateCLO()
-         
+    // update clo by using the cloCode of  the clo to find it in the list and then updating that clo with the new one
+    bool updateCLO()
 
         void addQuestionToQuestionsList(Question que)
-        {
-            questions.push_back(que);
-        }
-
+    {
+        questions.push_back(que);
+    }
 };
-
-
-
 
 /*********************************************FILE FUNCTIONS************************************************/
 
@@ -510,76 +498,7 @@ string InputCloFileName()
 
 vector<AcademicOfficer> InputAcademicOfficerData(string) {}
 
-vector<Teacher> InputTeacherData(string teacherFileName)
-{
-    vector<vector<Teacher>> teacherData = {};
-
-    ifstream fin;
-    int totalTeachers = 0;
-
-    char c;
-    fin.open(teacherFileName);
-
-    while (!(fin.eof()))
-    {
-        fin >> c;
-
-        if (c == '.')
-        {
-            totalTeachers++;
-        }
-    }
-    fin.close();
-
-    // totalTeachers--;
-    // teacherData = new Teacher[totalTeachers];
-
-    Teacher newTeacher;
-
-    string username, password, teacherName, department;
-    int totalCourses;
-    long long int PhoneNumber;
-    ;
-
-    fin.open(PassengerFile);
-    for (int c = 0; c < totalTeachers; c++)
-    {
-        if (c > 0)
-        {
-            fin.ignore();
-        }
-        getline(fin, username, ',');
-        fin.ignore();
-        getline(fin, password, ',');
-        fin.ignore();
-        getline(fin, teacherName, ',');
-        fin.ignore();
-        getline(fin, department, ',');
-        fin.ignore();
-        fin >> passportNo;
-        fin.ignore();
-        fin >> TotalTickets;
-        fin.ignore();
-
-        ticketids = new int[TotalTickets];
-
-        for (int i = 0; i < TotalTickets; i++)
-        {
-            fin >> ticketids[i];
-        }
-
-        fin.ignore();
-
-        teacherData[c].setUsername(username);
-        teacherData[c].setPassword(password);
-        teacherData[c].SetTeacherName(teacherName);
-        teacherData[c].SetDepartment(department);
-        teacherData[c].SetPhoneNumber(passportNo);
-        teacherData[c].SetTotalCourses(TotalTickets);
-        teacherData[c].SetCourseCodes(ticketids);
-    }
-    fin.close();
-}
+vector<Teacher> InputTeacherData(string teacherFileName) {}
 vector<Program> InputProgramData(string) {}
 vector<Course> InputCourseData(string) {}
 vector<PLO> InputPloData(string) {}

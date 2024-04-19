@@ -7,13 +7,21 @@
 
 using namespace std;
 
+class Teacher;
+class AcademicOfficer;
+class Program;
+class Course;
+class PLO;
+class CLO;
+class Question;
+class Evaluation;
 // actors
-
 class User
 {
 private:
     string username;
     string password;
+    string userType;
 
 public:
     // constructors
@@ -21,16 +29,19 @@ public:
     {
         username[0] = '\0';
         password[0] = '\0';
+        userType[0] = '\0';
     }
-    User(string newName, string newPassword)
+    User(string newName, string newPassword, string newType)
     {
         username = newName;
         password = newPassword;
+        userType = newType;
     }
     User(const User &newUser)
     {
         username = newUser.username;
         password = newUser.password;
+        userType = newUser.userType;
     }
     // setters
     void setUsername(string newName)
@@ -41,6 +52,10 @@ public:
     {
         password = newPassword;
     }
+    void setUserType(string newType)
+    {
+        userType = newType;
+    }
     // getters
     string getUsername()
     {
@@ -50,10 +65,14 @@ public:
     {
         return password;
     }
+    string getUserType()
+    {
+        return userType;
+    }
 
     bool operator==(const User &newUser)
     {
-        if (username == newUser.username && password == newUser.password)
+        if (username == newUser.username && password == newUser.password && userType == newUser.userType)
         {
             return true;
         }
@@ -62,7 +81,7 @@ public:
     }
     bool operator!=(const User &newUser)
     {
-        if (username != newUser.username && password != newUser.password)
+        if (username != newUser.username && password != newUser.password && userType != newUser.userType)
         {
             return true;
         }
@@ -74,6 +93,7 @@ public:
     {
         cout << "Username: " << username << endl;
         cout << "Password: " << password << endl;
+        cout << "User Type: " << userType << endl;
     }
 };
 
@@ -88,9 +108,9 @@ private:
 
 public:
     // Constructors
-    Teacher() : User(), teacherName(""), department(""), phoneNumber(0), noOfCourses(0), courses() {}
+    Teacher() : User("", "", "Teacher"), teacherName(""), department(""), phoneNumber(0), noOfCourses(0), courses() {}
 
-    Teacher(string newUsername, string newPassword, string newTeacherName, string newDepartment, long long int newPhoneNumber, int newNoOfCourses, vector<Course *> newCourses) : User(newUsername, newPassword), teacherName(newTeacherName), department(newDepartment), phoneNumber(newPhoneNumber), noOfCourses(newNoOfCourses), courses(newCourses) {}
+    Teacher(string newUsername, string newPassword, string newTeacherName, string newDepartment, long long int newPhoneNumber, int newNoOfCourses, vector<Course *> newCourses) : User(newUsername, newPassword, "Teacher"), teacherName(newTeacherName), department(newDepartment), phoneNumber(newPhoneNumber), noOfCourses(newNoOfCourses), courses(newCourses) {}
 
     // Setters
     void setTeacherName(string newTeacherName) { teacherName = newTeacherName; }
@@ -105,6 +125,15 @@ public:
     long long int getPhoneNumber() { return phoneNumber; }
     int getNoOfCourses() { return noOfCourses; }
     vector<Course *> getCourses() { return courses; }
+
+    // Add Course
+    void addCourse(Course *newCourse) { courses.push_back(newCourse); }
+
+    // Remove Course
+    void removeCourse(Course *removeCourse) { courses.erase(remove(courses.begin(), courses.end(), removeCourse)); }
+
+    // Update Course
+    void updateCourse(Course *updateCourse, Course *newCourse) { updateCourse = newCourse; }
 
     // Print function
     void print()
@@ -132,9 +161,9 @@ private:
 
 public:
     // Constructors
-    AcademicOfficer() : User(), academicOfficer(""), department(""), phoneNumber(0) {}
+    AcademicOfficer() : User("", "", "AcademicOfficer"), academicOfficer(""), department(""), phoneNumber(0) {}
 
-    AcademicOfficer(string newUsername, string newPassword, string newAcademicOfficerName, string newDepartment, long long int newPhoneNumber) : User(newUsername, newPassword), academicOfficer(newAcademicOfficerName), department(newDepartment), phoneNumber(newPhoneNumber) {}
+    AcademicOfficer(string newUsername, string newPassword, string newAcademicOfficerName, string newDepartment, long long int newPhoneNumber) : User(newUsername, newPassword, "AcademicOfficer"), academicOfficer(newAcademicOfficerName), department(newDepartment), phoneNumber(newPhoneNumber) {}
 
     // Setters
     void setAcademicOfficerName(string newAcademicOfficerName) { academicOfficer = newAcademicOfficerName; }
@@ -180,6 +209,25 @@ public:
     string getProgramName() { return programName; }
     vector<PLO *> getPLOs() { return plos; }
 
+    // Operator overloading for =
+    Program &operator=(Program other)
+    {
+        swap(programCode, other.programCode);
+        swap(programName, other.programName);
+        swap(plos, other.plos);
+        return *this;
+    }
+    // Operator overloading for == and!=
+    bool operator==(const Program &other) const
+    {
+        return programCode == other.programCode && programName == other.programName && plos == other.plos;
+    }
+
+    bool operator!=(const Program &other) const
+    {
+        return !(*this == other);
+    }
+
     // Add PLO
     void addPLO(PLO *newPLO) { plos.push_back(newPLO); }
 
@@ -187,7 +235,7 @@ public:
     void removePLO(PLO *removePLO) { plos.erase(remove(plos.begin(), plos.end(), removePLO)); }
 
     // Update PLO
-    void updatePLO(PLO *updatePLO, PLO *newPLO) { *updatePLO = *newPLO; }
+    void updatePLO(PLO *updatePLO, PLO *newPLO) { updatePLO = newPLO; }
 
     // Print function
     void print()
@@ -199,17 +247,6 @@ public:
         {
             plo->print();
         }
-    }
-
-    // Operator overloading for == and!=
-    bool operator==(const Program &other) const
-    {
-        return programCode == other.programCode && programName == other.programName && plos == other.plos;
-    }
-
-    bool operator!=(const Program &other) const
-    {
-        return !(*this == other);
     }
 };
 
@@ -236,25 +273,13 @@ public:
     string getCourseName() { return courseName; }
     vector<CLO *> getCLOs() { return clos; }
 
-    // Add CLO
-    void addCLO(CLO *newCLO) { clos.push_back(newCLO); }
-
-    // Remove CLO
-    void removeCLO(CLO *removeCLO) { clos.erase(remove(clos.begin(), clos.end(), removeCLO)); }
-
-    // Update CLO
-    void updateCLO(CLO *updateCLO, CLO *newCLO) { *updateCLO = *newCLO; }
-
-    // Print function
-    void print()
+    // Operator overloading for =
+    Course &operator=(Course other)
     {
-        cout << "Course Code: " << courseCode << endl;
-        cout << "Course Name: " << courseName << endl;
-        cout << "CLOs: " << endl;
-        for (auto clo : clos)
-        {
-            clo->print();
-        }
+        swap(courseCode, other.courseCode);
+        swap(courseName, other.courseName);
+        swap(clos, other.clos);
+        return *this;
     }
 
     // Operator overloading for == and!=
@@ -266,6 +291,27 @@ public:
     bool operator!=(const Course &other) const
     {
         return !(*this == other);
+    }
+
+    // Add CLO
+    void addCLO(CLO *newCLO) { clos.push_back(newCLO); }
+
+    // Remove CLO
+    void removeCLO(CLO *removeCLO) { clos.erase(remove(clos.begin(), clos.end(), removeCLO)); }
+
+    // Update CLO
+    void updateCLO(CLO *updateCLO, CLO *newCLO) { updateCLO = newCLO; }
+
+    // Print function
+    void print()
+    {
+        cout << "Course Code: " << courseCode << endl;
+        cout << "Course Name: " << courseName << endl;
+        cout << "CLOs: " << endl;
+        for (auto clo : clos)
+        {
+            clo->print();
+        }
     }
 };
 
@@ -292,25 +338,13 @@ public:
     string getPLODescription() { return ploDescription; }
     vector<CLO *> getCLOs() { return clos; }
 
-    // Add CLO
-    void addCLO(CLO *newCLO) { clos.push_back(newCLO); }
-
-    // Remove CLO
-    void removeCLO(CLO *removeCLO) { clos.erase(remove(clos.begin(), clos.end(), removeCLO)); }
-
-    // Update CLO
-    void updateCLO(CLO *updateCLO, CLO *newCLO) { *updateCLO = *newCLO; }
-
-    // Print function
-    void print()
+    // Operator overloading for =
+    PLO &operator=(PLO other)
     {
-        cout << "PLO Code: " << ploCode << endl;
-        cout << "PLO Description: " << ploDescription << endl;
-        cout << "CLOs: " << endl;
-        for (auto clo : clos)
-        {
-            clo->print();
-        }
+        swap(ploCode, other.ploCode);
+        swap(ploDescription, other.ploDescription);
+        swap(clos, other.clos);
+        return *this;
     }
 
     // Operator overloading for == and!=
@@ -322,6 +356,27 @@ public:
     bool operator!=(const PLO &other) const
     {
         return !(*this == other);
+    }
+
+    // Add CLO
+    void addCLO(CLO *newCLO) { clos.push_back(newCLO); }
+
+    // Remove CLO
+    void removeCLO(CLO *removeCLO) { clos.erase(remove(clos.begin(), clos.end(), removeCLO)); }
+
+    // Update CLO
+    void updateCLO(CLO *updateCLO, CLO *newCLO) { updateCLO = newCLO; }
+
+    // Print function
+    void print()
+    {
+        cout << "PLO Code: " << ploCode << endl;
+        cout << "PLO Description: " << ploDescription << endl;
+        cout << "CLOs: " << endl;
+        for (auto clo : clos)
+        {
+            clo->print();
+        }
     }
 };
 
@@ -354,6 +409,27 @@ public:
     PLO getPLO() { return plo; }
     vector<Question *> getQuestions() { return questions; }
 
+    CLO &operator=(CLO other)
+    {
+        swap(cloCode, other.cloCode);
+        swap(cloDescription, other.cloDescription);
+        swap(cloTopic, other.cloTopic);
+        swap(plo, other.plo);
+        swap(questions, other.questions);
+        return *this;
+    }
+
+    // Operator overloading for == and!=
+    bool operator==(const CLO &other) const
+    {
+        return cloCode == other.cloCode && cloDescription == other.cloDescription && cloTopic == other.cloTopic && plo == other.plo && questions == other.questions;
+    }
+
+    bool operator!=(const CLO &other) const
+    {
+        return !(*this == other);
+    }
+
     // Add Question
     void addQuestion(Question *newQuestion) { questions.push_back(newQuestion); }
 
@@ -361,7 +437,7 @@ public:
     void removeQuestion(Question *removeQuestion) { questions.erase(remove(questions.begin(), questions.end(), removeQuestion)); }
 
     // Update Question
-    void updateQuestion(Question *updateQuestion, Question *newQuestion) { *updateQuestion = *newQuestion; }
+    void updateQuestion(Question *updateQuestion, Question *newQuestion) { updateQuestion = newQuestion; }
 
     // Print function
     void print()
@@ -377,17 +453,6 @@ public:
         {
             question->print();
         }
-    }
-
-    // Operator overloading for == and!=
-    bool operator==(const CLO &other) const
-    {
-        return cloCode == other.cloCode && cloDescription == other.cloDescription && cloTopic == other.cloTopic && plo == other.plo && questions == other.questions;
-    }
-
-    bool operator!=(const CLO &other) const
-    {
-        return !(*this == other);
     }
 };
 
@@ -411,6 +476,24 @@ public:
     string getQuestionText() { return questionText; }
     vector<CLO *> getTestedCLO() { return testedCLO; }
 
+    Question &operator=(Question other)
+    {
+        swap(questionText, other.questionText);
+        swap(testedCLO, other.testedCLO);
+        return *this;
+    }
+
+    // Operator overloading for == and!=
+    bool operator==(const Question &other) const
+    {
+        return questionText == other.questionText && testedCLO == other.testedCLO;
+    }
+
+    bool operator!=(const Question &other) const
+    {
+        return !(*this == other);
+    }
+
     // Add CLO
     void addCLO(CLO *newCLO) { testedCLO.push_back(newCLO); }
 
@@ -429,17 +512,6 @@ public:
         {
             clo->print();
         }
-    }
-
-    // Operator overloading for == and!=
-    bool operator==(const Question &other) const
-    {
-        return questionText == other.questionText && testedCLO == other.testedCLO;
-    }
-
-    bool operator!=(const Question &other) const
-    {
-        return !(*this == other);
     }
 };
 
@@ -466,6 +538,25 @@ public:
     vector<CLO *> getRelatedCLOs() { return relatedCLOs; }
     vector<Question *> getQuestions() { return questions; }
 
+    Evaluation &operator=(Evaluation other)
+    {
+        swap(evaluationType, other.evaluationType);
+        swap(relatedCLOs, other.relatedCLOs);
+        swap(questions, other.questions);
+        return *this;
+    }
+
+    // Operator overloading for == and!=
+    bool operator==(const Evaluation &other) const
+    {
+        return evaluationType == other.evaluationType && relatedCLOs == other.relatedCLOs && questions == other.questions;
+    }
+
+    bool operator!=(const Evaluation &other) const
+    {
+        return !(*this == other);
+    }
+
     // Add Question
     void addQuestion(Question *newQuestion) { questions.push_back(newQuestion); }
 
@@ -489,17 +580,6 @@ public:
         {
             question->print();
         }
-    }
-
-    // Operator overloading for == and!=
-    bool operator==(const Evaluation &other) const
-    {
-        return evaluationType == other.evaluationType && relatedCLOs == other.relatedCLOs && questions == other.questions;
-    }
-
-    bool operator!=(const Evaluation &other) const
-    {
-        return !(*this == other);
     }
 };
 
@@ -559,12 +639,12 @@ int main()
     // Variable Declaration
     string academicOfficerFile, teacherFile, programFile, courseFile, ploFile, cloFile;
 
-    academicOfficerFile = InputAcademicOfficerFileName();
-    teacherFile = InputTeacherFileName();
-    programFile = InputProgramFileName();
-    courseFile = InputCourseFileName();
-    ploFile = InputPloFileName();
-    cloFile = InputCloFileName();
+    // academicOfficerFile = InputAcademicOfficerFileName();
+    // teacherFile = InputTeacherFileName();
+    // programFile = InputProgramFileName();
+    // courseFile = InputCourseFileName();
+    // ploFile = InputPloFileName();
+    // cloFile = InputCloFileName();
 
     return 0;
 }
