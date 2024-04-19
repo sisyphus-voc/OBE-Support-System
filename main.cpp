@@ -513,35 +513,26 @@ int main()
 
     string academicOfficerFile, teacherFile, programFile, courseFile, ploFile, cloFile;
 
-    vector<AcademicOfficer> academicOfficerData;
-    vector<Teacher> teacherData;
-    vector<Program> programData;
-    vector<Course> courseData;
-    vector<PLO> ploData;
-    vector<CLO> cloData;
+    //  vector<AcademicOfficer> academicOfficerData;
+    // vector<Teacher> teacherData;
+    // vector<Program> programData;
+    // vector<Course> courseData;
+    // vector<PLO> ploData;
+    // vector<CLO> cloData;
 
-    academicOfficerFile = InputAcademicOfficerFileName();
-    teacherFile = InputTeacherFileName();
-    programFile = InputProgramFileName();
-    courseFile = InputCourseFileName();
-    ploFile = InputPloFileName();
-    cloFile = InputCloFileName();
+    // academicOfficerFile = InputAcademicOfficerFileName();
+    // teacherFile = InputTeacherFileName();
+    // programFile = InputProgramFileName();
+    // courseFile = InputCourseFileName();
+    // ploFile = InputPloFileName();
+    // cloFile = InputCloFileName();
 
-    enum
-    {
-        Program,
-        Course,
-        PLO,
-        CLO
-    };
-    cout << Program << endl;
-
-    academicOfficerData = InputAcademicOfficerData(academicOfficerFile);
-    teacherData = InputTeacherData(teacherFile);
-    programData = InputProgramData(programFile);
-    courseData = InputCourseData(courseFile);
-    ploData = InputPloData(ploFile);
-    cloData = InputCloData(cloFile);
+    // academicOfficerData = InputAcademicOfficerData(academicOfficerFile);
+    // teacherData = InputTeacherData(teacherFile);
+    // programData = InputProgramData(programFile);
+    // courseData = InputCourseData(courseFile);
+    // ploData = InputPloData(ploFile);
+    // cloData = InputCloData(cloFile);
 
     // choice variables
     int userchoice = 0;

@@ -44,6 +44,9 @@ int AdminMenu()
     cout << "2. Courses" << endl;
     cout << "3. PLO" << endl;
     cout << "4. CLO" << endl;
+    cout << "5. Check Whether a CLO has been tested or not(in two different questions)" << endl;
+    cout << "6. Check whether all ClO's of a given course have been tested" << endl;
+    cout << "6. Given a PLO generate a list of all the relevant courses" << endl;
     cout << "0. Exit" << endl;
 
     cout << "=> ";

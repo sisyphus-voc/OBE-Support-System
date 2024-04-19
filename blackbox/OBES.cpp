@@ -7,10 +7,11 @@
 
 using namespace std;
 
+class Course;
 class Teacher;
 class AcademicOfficer;
 class Program;
-class Course;
+
 class PLO;
 class CLO;
 class Question;
@@ -133,7 +134,7 @@ public:
     void removeCourse(Course *removeCourse) { courses.erase(remove(courses.begin(), courses.end(), removeCourse)); }
 
     // Update Course
-    void updateCourse(Course *updateCourse, Course *newCourse) { updateCourse = newCourse; }
+    void updateCourse(Course *updateCourse, Course *newCourse) { *updateCourse = *newCourse; }
 
     // Print function
     void print()
@@ -235,7 +236,7 @@ public:
     void removePLO(PLO *removePLO) { plos.erase(remove(plos.begin(), plos.end(), removePLO)); }
 
     // Update PLO
-    void updatePLO(PLO *updatePLO, PLO *newPLO) { updatePLO = newPLO; }
+    void updatePLO(PLO *updatePLO, PLO *newPLO) { *updatePLO = *newPLO; }
 
     // Print function
     void print()
@@ -300,7 +301,7 @@ public:
     void removeCLO(CLO *removeCLO) { clos.erase(remove(clos.begin(), clos.end(), removeCLO)); }
 
     // Update CLO
-    void updateCLO(CLO *updateCLO, CLO *newCLO) { updateCLO = newCLO; }
+    void updateCLO(CLO *updateCLO, CLO *newCLO) { *updateCLO = *newCLO; }
 
     // Print function
     void print()
@@ -365,7 +366,7 @@ public:
     void removeCLO(CLO *removeCLO) { clos.erase(remove(clos.begin(), clos.end(), removeCLO)); }
 
     // Update CLO
-    void updateCLO(CLO *updateCLO, CLO *newCLO) { updateCLO = newCLO; }
+    void updateCLO(CLO *updateCLO, CLO *newCLO) { *updateCLO = *newCLO; }
 
     // Print function
     void print()
@@ -437,7 +438,7 @@ public:
     void removeQuestion(Question *removeQuestion) { questions.erase(remove(questions.begin(), questions.end(), removeQuestion)); }
 
     // Update Question
-    void updateQuestion(Question *updateQuestion, Question *newQuestion) { updateQuestion = newQuestion; }
+    void updateQuestion(Question *updateQuestion, Question *newQuestion) { *updateQuestion = *newQuestion; }
 
     // Print function
     void print()
@@ -645,6 +646,8 @@ int main()
     // courseFile = InputCourseFileName();
     // ploFile = InputPloFileName();
     // cloFile = InputCloFileName();
+
+    
 
     return 0;
 }
