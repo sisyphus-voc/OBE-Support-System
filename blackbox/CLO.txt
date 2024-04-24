@@ -1,0 +1,4 @@
+CLO1,CLO1 Description,CLO1 Topic,PLO1.
+CLO2,CLO2 Description,CLO2 Topic,PLO2.
+CLO3,CLO3 Description,CLO3 Topic,PLO3.
+CLO4,CLO4 Description,CLO4 Topic,PLO4.

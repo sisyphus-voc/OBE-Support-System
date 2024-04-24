@@ -638,7 +638,8 @@ string InputCloFileName()
 int main()
 {
     // Variable Declaration
-    string academicOfficerFile, teacherFile, programFile, courseFile, ploFile, cloFile;
+    string academicOfficerFile, teacherFile, programFile, courseFile, ploFile, cloFile;  
+
 
     // academicOfficerFile = InputAcademicOfficerFileName();
     // teacherFile = InputTeacherFileName();

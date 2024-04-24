@@ -1,0 +1,4 @@
+PLO1,PLO1 Description,PROG1.
+PLO2,PLO2 Description,PROG2.
+PLO3,PLO3 Description,PROG3.
+PLO4,PLO4 Description,PROG4.

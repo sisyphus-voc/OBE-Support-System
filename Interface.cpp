@@ -32,12 +32,18 @@ int main()
                         {
                         case 1:
                             cout << "Add\n"; // AddProgram();
+                            //prompt the user to enter the details about the program
+                            //use those details to create and object and push it into the
+                            //program data vector, then append it into the main file.
                             break;
                         case 2:
                             cout << "Remove\n"; // RemoveProgram();
+                            //get the programCode from the user, go to the program data vector, delete the said vector and then replace the file data with the new updated vector.
                             break;
                         case 3:
                             cout << "Update"; // UpdateProgram();
+                            //get program code of the vector that needs to be updated, make a copy of that vector and get info that needs to be changed, change it in the copy and swap the vectors in the main vector file and append
+                            
                             break;
                         case 0:
                             break;
