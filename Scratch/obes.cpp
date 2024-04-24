@@ -335,6 +335,87 @@ public:
         }
     }
 };
+class Program
+{
+private:
+    string programCode;
+    string programName;
+    vector<Course *> courses;
+    vector<PLO *> plos;
+
+public:
+    // Constructors
+    Program() : programCode(""), programName(""), plos(), courses() {}
+
+    Program(string newProgramCode, string newProgramName, vector<PLO *> newPlos, vector<Course *> newCourses) : programCode(newProgramCode), programName(newProgramName), plos(newPlos), courses(newCourses) {}
+
+    // Setters
+    void setProgramCode(string newProgramCode) { programCode = newProgramCode; }
+    void setProgramName(string newProgramName) { programName = newProgramName; }
+    void setCourses(vector<Course *> newCourses) { courses = newCourses; }
+    void setPLOs(vector<PLO *> newPlos) { plos = newPlos; }
+
+    // Getters
+    string getProgramCode() { return programCode; }
+    string getProgramName() { return programName; }
+    vector<Course *> getCourse() { return courses; }
+    vector<PLO *> getPLOs() { return plos; }
+
+    // Operator overloading for =
+    Program &operator=(Program other)
+    {
+        swap(programCode, other.programCode);
+        swap(programName, other.programName);
+        swap(courses, other.courses);
+        swap(plos, other.plos);
+        return *this;
+    }
+    // Operator overloading for == and!=
+    bool operator==(const Program &other) const
+    {
+        return programCode == other.programCode && programName == other.programName && plos == other.plos;
+    }
+
+    bool operator!=(const Program &other) const
+    {
+        return !(*this == other);
+    }
+
+    // Add PLO
+    void addPLO(PLO *newPLO) { plos.push_back(newPLO); }
+
+    // Remove PLO
+    void removePLO(PLO *removePLO) { plos.erase(remove(plos.begin(), plos.end(), removePLO)); }
+
+    // Update PLO
+    void updatePLO(PLO *updatePLO, PLO *newPLO) { *updatePLO = *newPLO; }
+
+    // Add Course
+    void addCourse(Course *newCourse) { courses.push_back(newCourse); }
+
+    // Remove Course
+    void removeCourse(Course *removeCourse) { courses.erase(remove(courses.begin(), courses.end(), removeCourse)); }
+
+    // Update Course
+    void updateCourse(Course *updateCourse, Course *newCourse) { *updateCourse = *newCourse; }
+
+    // Print function
+    void print()
+    {
+        cout << "Program Code: " << programCode << endl;
+        cout << "Program Name: " << programName << endl;
+        cout << "Courses: " << endl;
+        for (auto c : courses)
+        {
+            c->print();
+        }
+        cout << "PLOs: " << endl;
+        for (auto plo : plos)
+        {
+            plo->print();
+        }
+    }
+};
 
 /****************************File Functions******************/
 
@@ -506,8 +587,6 @@ vector<Course *> readCoursesFromFile(const string &filename)
     }
 
     string line;
-    // Skip the first line assuming it contains headers
-    getline(file, line);
 
     while (getline(file, line))
     {
@@ -529,6 +608,39 @@ vector<Course *> readCoursesFromFile(const string &filename)
 
     file.close();
     return courseVector;
+}
+
+// Function to read program data from file
+vector<Program *> readProgramsFromFile(const string &filename)
+{
+    vector<Program *> programVector;
+    ifstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return programVector;
+    }
+
+    string line;
+    while (getline(file, line))
+    {
+        // Use stringstream to parse the line
+        stringstream ss(line);
+        string programCode, programName;
+
+        // Read each comma-separated value
+        getline(ss, programCode, ',');
+        getline(ss, programName, '.');
+
+        // Create a new Program object with the parsed data
+        Program *program = new Program(programCode, programName, {}, {});
+
+        // Add the Program object to the vector
+        programVector.push_back(program);
+    }
+
+    file.close();
+    return programVector;
 }
 
 // Search
@@ -569,6 +681,18 @@ int searchCourseIndexByCode(const vector<Course *> &courseData, const string &co
     return -1; // Return -1 if no matching course object is found
 }
 
+int searchProgramIndexByCode(const vector<Program *> &programData, const string &code)
+{
+    for (size_t i = 0; i < programData.size(); ++i)
+    {
+        if (programData[i]->getProgramCode() == code)
+        {
+            return i; // Return the index of the found program object
+        }
+    }
+    return -1; // Return -1 if no matching program object is found
+}
+
 // Point Question objects to their corresponding CLO
 void addQuestionObjsInCLOs(vector<Question *> &questionData, vector<CLO *> &cloData)
 {
@@ -604,7 +728,36 @@ void addCloObjsInCourses(vector<CLO *> &cloData, vector<Course *> &courseData)
         }
     }
 }
-
+void addPLOsInPrograms(vector<PLO *> &ploData, vector<Program *> &programData)
+{
+    for (PLO *plo : ploData)
+    {
+        int idx = searchProgramIndexByCode(programData, plo->getProgramCode());
+        if (idx != -1)
+        {
+            programData[idx]->addPLO(plo);
+        }
+        else
+        {
+            cerr << "Program with code " << plo->getProgramCode() << " not found." << endl;
+        }
+    }
+}
+void addCoursesInPrograms(vector<Course *> &courseData, vector<Program *> &programData)
+{
+    for (Course *course : courseData)
+    {
+        int idx = searchProgramIndexByCode(programData, course->getProgramCode());
+        if (idx != -1)
+        {
+            programData[idx]->addCourse(course);
+        }
+        else
+        {
+            cerr << "Program with code " << course->getProgramCode() << " not found." << endl;
+        }
+    }
+}
 int main()
 {
     // Variable Declaration
@@ -615,29 +768,35 @@ int main()
     questionFile = "questions.txt";
     ploFile = "plo.txt";
     courseFile = "courses.txt";
+    programFile = "programs.txt";
     // cloFile = InputCloFileName();
     // questionFile = InputQuestionsFileName();
     // ploFile = InputPloFileName();
     // courseFile=InputCourseFileName();
+    // programFile=InputProgramFileName();
 
     // Vector to pointer of objects
     vector<Question *> questionData;
     vector<CLO *> cloData;
     vector<PLO *> ploData;
     vector<Course *> courseData;
+    vector<Program *> programData;
 
     questionData = readQuestionsFromFile(questionFile);
     cloData = readCLOsFromFile(cloFile);
     ploData = readPLOsFromFile(ploFile);
     courseData = readCoursesFromFile(courseFile);
+    programData = readProgramsFromFile(programFile);
 
     addQuestionObjsInCLOs(questionData, cloData);
     addCloObjsInPLOs(cloData, ploData);
     addCloObjsInCourses(cloData, courseData);
-    
-    for (Course *course : courseData)
+    addPLOsInPrograms(ploData, programData);
+    addCoursesInPrograms(courseData, programData);
+
+    for (Program *program : programData)
     {
-        course->print();
+        program->print();
     }
 
     return 0;
