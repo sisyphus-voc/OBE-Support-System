@@ -9,6 +9,136 @@
 
 using namespace std;
 
+//------------------------------------------Menu Functions
+
+int getChoice()
+{
+    int choice = 0;
+
+    cin >> choice;
+    while (!cin.good())
+    {
+        cout << "Invalid Input (Wrong Data Type)\n";
+        cin.clear();
+        // cin.ignore(std::numeric_limits<int>::max(), '\n');
+        cout << "=>";
+        cin >> choice;
+    }
+    return choice;
+}
+
+int MainMenu()
+{
+    int choice = 0;
+    system("CLS");
+    cout << "Welcome to the Objective Based Education Support System!!" << endl;
+    cout << endl;
+    cout << "Choose one of the options down below!" << endl;
+    cout << "1. For Admin" << endl;
+    cout << "2. For Teacher" << endl;
+    cout << "0. To exit the program" << endl;
+    cout << "=> ";
+    choice = getChoice();
+    return choice;
+}
+
+int AdminMenu()
+{
+    int choice = 0;
+    system("CLS");
+    cout << "Choose whatever you would like to do:" << endl;
+
+    cout << "1. Programs" << endl;
+    cout << "2. Courses" << endl;
+    cout << "3. PLO" << endl;
+    cout << "4. CLO" << endl;
+    cout << "5. Check Whether a CLO has been tested or not(in two different questions)" << endl;
+    cout << "6. Check whether all ClO's of a given course have been tested" << endl;
+    cout << "7. Given a PLO generate a list of all the relevant courses" << endl;
+    cout << "8. Add New Teacher" << endl;
+    cout << "0. Exit" << endl;
+
+    cout << "=> ";
+    choice = getChoice();
+    return choice;
+}
+
+int ActionMenu(string obj)
+{
+    int choice = 0;
+    system("CLS");
+    cout << "Choose whatever you would like to do:" << endl;
+
+    cout << "1. Add " << obj << endl;
+    cout << "2. Remove " << obj << endl;
+    cout << "3. Update " << obj << endl;
+    cout << "0. Exit " << obj << endl;
+
+    cout << "=> ";
+    choice = getChoice();
+    return choice;
+}
+
+int ProgramMenu()
+{
+    string menuType;
+    menuType = "Program";
+    ActionMenu(menuType);
+}
+int CourseMenu()
+{
+    string menuType;
+    menuType = "Course";
+    ActionMenu(menuType);
+}
+int PloMenu()
+{
+    string menuType;
+    menuType = "PLO";
+    ActionMenu(menuType);
+}
+int CloMenu()
+{
+    string menuType;
+    menuType = "CLO";
+    ActionMenu(menuType);
+}
+
+int TeacherMenu()
+{
+    int choice = 0;
+    system("CLS");
+    cout << "Choose whatever you would like to do:" << endl;
+
+    cout << "1. Add CLO Topic" << endl;
+    cout << "2. Add Evaluation" << endl;
+    cout << "3. Associate CLO with evaluation" << endl;
+    cout << "0. Exit" << endl;
+
+    cout << "=> ";
+    choice = getChoice();
+    return choice;
+    return 0;
+}
+
+int EvaluationMenu()
+{
+    int choice = 0;
+    system("CLS");
+    cout << "Choose whatever you would like to do:" << endl;
+
+    cout << "1. Add Quiz" << endl;
+    cout << "2. Add Exam" << endl;
+    cout << "3. Add Project" << endl;
+    cout << "3. Add Assignment" << endl;
+    cout << "0. Exit " << endl;
+
+    cout << "=> ";
+    choice = getChoice();
+    return choice;
+}
+
+//------------------------------------------------------------------------------
 class PLO;
 class CLO;
 class Question;
@@ -68,7 +198,7 @@ public:
     // Print function
     void print()
     {
-        cout << "Question ID: " << questionId << endl;
+        cout << "Question ID: " + questionId + " (" + cloCode + ")" << endl;
         cout << "Question Text: " << questionText << endl;
     }
     void printWithCLO();
@@ -180,10 +310,18 @@ public:
         cout << "CLO Topic: " << cloTopic << endl;
         cout << "PLO: " << ploCode << endl;
         cout << "Course: " << courseCode << endl;
-        cout << "Questions: " << endl;
-        for (auto question : questions)
+        cout << "Number of Questions: " << questions.size() << endl;
+        if (questions.empty())
         {
-            question->print();
+            cout << "No Questions in this CLO" << endl;
+        }
+        else
+        {
+            cout << "Questions: " << endl;
+            for (auto question : questions)
+            {
+                question->print();
+            }
         }
     }
 };
@@ -269,11 +407,13 @@ public:
             cout << "No CLOs in this PLO.\n\n";
         else
         {
-            cout << "CLOs: " << endl;
+
             for (auto clo : clos)
             {
-                clo->print();
+                cout << clo->getCloCode() << "\t";
             }
+            cout << endl
+                 << endl;
         }
     }
 };
@@ -340,10 +480,18 @@ public:
         cout << "Course Code: " << courseCode << endl;
         cout << "Course Name: " << courseName << endl;
         cout << "Program: " << programCode << endl;
-        cout << "CLOs: " << endl;
-        for (auto clo : clos)
+        cout << "Number of CLOs: " << clos.size() << "\n";
+        if (clos.empty())
+            cout << "No CLOs in this PLO.\n\n";
+        else
         {
-            clo->print();
+
+            for (auto clo : clos)
+            {
+                cout << clo->getCloCode() << "\t";
+            }
+            cout << endl
+                 << endl;
         }
     }
 };
@@ -416,16 +564,21 @@ public:
     {
         cout << "Program Code: " << programCode << endl;
         cout << "Program Name: " << programName << endl;
+        cout << "Number of Courses: " << courses.size() << endl;
         cout << "Courses: " << endl;
         for (auto c : courses)
         {
-            c->print();
+            cout << c->getCourseCode() + "\t";
         }
+        cout << endl;
+        cout << "Number of PLOs: " << plos.size() << endl;
         cout << "PLOs: " << endl;
         for (auto plo : plos)
         {
-            plo->print();
+            cout << plo->getPLOCode() + "\t";
         }
+        cout << endl
+             << endl;
     }
 };
 
@@ -487,11 +640,22 @@ public:
     void addCLO(CLO *newCLO) { relatedCLOs.push_back(newCLO); }
 
     // Remove CLO
-    void removeCLO(CLO *removeCLO) { relatedCLOs.erase(remove(relatedCLOs.begin(), relatedCLOs.end(), removeCLO)); }
+    void removeCLO(CLO *removeCLO) { relatedCLOs.erase(remove(relatedCLOs.begin(), relatedCLOs.end(), removeCLO), relatedCLOs.end()); }
 
     // Update CLO
     void updateCLO(CLO *updateCLO, CLO *newCLO) { *updateCLO = *newCLO; }
 
+    bool questionExists(Question *tempQuestion)
+    {
+        for (auto q : questions)
+        {
+            if (q == tempQuestion)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     // Print function
     void print()
     {
@@ -719,8 +883,8 @@ public:
         for (auto course : courses)
         {
 
-            cout << course->getCourseCode() << endl
-                 << course->getCourseName() << endl;
+            cout << course->getCourseCode() << "\t\t("
+                 << course->getCourseName() << ")" << endl;
         }
     }
 };
@@ -1092,6 +1256,17 @@ vector<Teacher *> readTeachersFromFile(const string &filename)
 }
 
 // Search
+int searchEvaluationIndexByCode(const vector<Evaluation *> &evalData, const string &code)
+{
+    for (size_t i = 0; i < evalData.size(); ++i)
+    {
+        if (evalData[i]->getEvaluationCode() == code)
+        {
+            return i; // Return the index of the found CLO object
+        }
+    }
+    return -1; // Return -1 if no matching CLO object is found
+}
 //  Function to search for a CLO object by cloCode and return its index
 int searchQuestionIndexByCode(const vector<Question *> &questionData, const string &code)
 {
@@ -1277,6 +1452,8 @@ bool SignIn(const vector<T *> &data)
         {
             isFound = true;
             item->print();
+            system("pause");
+            system("cls");
             break;
         }
     }
@@ -1343,6 +1520,7 @@ bool SignUp(vector<Teacher *> &teacherData)
     system("CLS");
     cout << "Your account has been created, " << temp->getTeacherName() << "!" << endl;
     temp->print();
+    system("Pause");
 
     return true;
 }
@@ -1473,6 +1651,7 @@ bool AddNewProgram(vector<Program *> &progData)
     cout << "Program has been added!" << endl;
     cout << "Program Code: " << code << endl;
     cout << "Program Name: " << name << endl;
+    system("Pause");
 
     return true;
 }
@@ -1508,6 +1687,8 @@ bool AddNewCourse(vector<Course *> &courseData)
     cout << "Course has been added!" << endl;
     cout << "Course Code: " << code << endl;
     cout << "Course Name: " << name << endl;
+    system("pause");
+    system("cls");
 
     return true;
 }
@@ -1569,6 +1750,8 @@ bool AddNewPlo(vector<PLO *> &ploData, vector<Program *> &progData)
     cout << "PLO has been added!" << endl;
     cout << "PLO Code: " << code << endl;
     cout << "PLO Description: " << desc << endl;
+    system("pause");
+    system("cls");
 
     return true;
 }
@@ -1691,32 +1874,40 @@ void RemoveClo(vector<CLO *> &cloData, vector<Evaluation *> &evalData, vector<Co
     ploIdx = searchPLOIndexByCode(ploData, cloData[cloIdx]->getPloCode());
     ploData[ploIdx]->removeCLO(cloData[cloIdx]);
 
+    for (Evaluation *e : evalData)
+    {
+        e->removeCLO(cloData[cloIdx]);
+    }
     vector<Question *> temp = cloData[cloIdx]->getQuestions();
-
     for (auto q : temp)
     {
-
         for (auto e : evalData)
         {
-            e->removeQuestion(q);
+            if (e->questionExists(q))
+            {
+                e->removeQuestion(q);
+                break;
+            }
+            else
+                continue;
         }
     }
-    cout << "meh\n";
+    cout << "CLO with code: " << code << " has been removed successfully\n";
+
+    for (auto e : evalData)
+    {
+        e->print();
+    }
+
     for (auto q : temp)
     {
         cloData[cloIdx]->removeQuestion(q);
     }
 
-    for (auto e : evalData)
-    {
-        e->removeCLO(cloData[cloIdx]);
-    }
-
+    system("pause");
+    system("cls");
     cloData.erase(cloData.begin() + cloIdx);
     cout << "CLO " << code << "has been removed successfully\n";
-
-    system("Pause");
-    system("cls");
 }
 // TeacherFunctions---------------------------------------------------
 void AddCloTopic(vector<CLO *> &cloData)
@@ -1758,6 +1949,446 @@ void AddCloTopic(vector<CLO *> &cloData)
     cout << "CLO Topic: " << cloData[cloIdx]->getCloTopic() << endl;
     system("pause");
     system("CLS");
+}
+
+void AddEvaluation(vector<Evaluation *> &evalData, string evalType)
+{
+    // get evaluation data from user
+    string evalCode;
+    bool isDuplicate = true;
+    while (isDuplicate)
+    {
+        cout << "Enter Evaluation Code: " << endl
+             << "=>";
+        cin >> evalCode;
+        if (searchEvaluationIndexByCode(evalData, evalCode) != -1)
+        {
+            cerr << "Error: Duplicate Evaluation Code.\n"
+                 << "Please enter a unique code." << endl;
+            continue; // Set isDuplicate to true to terminate the loop
+        }
+        else
+        {
+            isDuplicate = false;
+            break;
+        }
+    }
+    Evaluation *newEval = new Evaluation(evalType, evalCode, {}, {});
+    evalData.push_back(newEval);
+    system("CLS");
+    cout << "Evaluation has been added!" << endl;
+    cout << "Evaluation Type: " << newEval->getEvaluationType() << endl;
+    cout << "Evaluation Code: " << newEval->getEvaluationCode() << endl;
+    system("pause");
+    system("CLS");
+}
+void AssociateEvaluationWithCLOs(vector<Evaluation *> &evaluationData, vector<Question *> &questionData, vector<CLO *> &cloData)
+{
+
+    string evalCode = "";
+    int evalIdx;
+
+    displayAllObjects(evaluationData);
+    cout << "Please select Evaluation:\n";
+
+    bool validInput = false;
+    while (!validInput)
+    {
+        cout << "Enter  Code: ";
+        cin >> evalCode;
+        evalIdx = searchEvaluationIndexByCode(evaluationData, evalCode);
+
+        if (evalIdx == -1)
+        {
+            cerr << "Error: Invalid Program Code\n";
+            validInput = false;
+        }
+        else
+        {
+            validInput = true;
+            break;
+        }
+    }
+    system("cls");
+    string choice = "y";
+    string qCode;
+    int qIdx = -1;
+    while (choice == "y")
+    {
+        choice = "y";
+        qIdx = -1;
+
+        cout << "\nWould you like to add question? (y/n): ";
+        cin >> choice;
+        cin.ignore();
+        if (choice != "y" && choice != "Y")
+        {
+            break;
+        }
+        else
+        {
+            displayAllObjects(questionData);
+            while (qIdx == -1)
+            {
+                cout << "Enter the Question Code: \n=>";
+                cin >> qCode;
+                qIdx = searchQuestionIndexByCode(questionData, qCode);
+                if (qIdx != -1)
+                {
+                    evaluationData[evalIdx]->addQuestion(questionData[qIdx]);
+                    int cloIdx;
+                    cloIdx = searchCLOIndexByCode(cloData, questionData[qIdx]->getTestedCLO());
+                    evaluationData[evalIdx]->addCLO(cloData[cloIdx]);
+                    break;
+                }
+                else if (qIdx == -1)
+                {
+                    cerr << "Invalid Question Code.\n";
+                    break;
+                }
+            }
+        }
+    }
+
+    cout << "Evaluation has been associated!" << endl;
+    evaluationData[evalIdx]->print();
+    system("pause");
+    system("CLS");
+}
+// Update Functions---------------------------
+void UpdateClo(vector<CLO *> &cloData)
+{
+    // get input for what the user wants to change
+    string updateType, code, inputStr;
+    string choice = "";
+    bool validInput = false;
+    int idx;
+    displayAllObjects(cloData);
+    while (!validInput)
+    {
+        cout << "Enter code of the CLO that you want to edit:\n=>";
+        cin >> code;
+        idx = searchCLOIndexByCode(cloData, code);
+        if (idx == -1)
+        {
+            cout << "Invalid Input! Please enter a valid CLO code." << endl;
+            validInput = false;
+        }
+        else
+        {
+            validInput = true;
+            cout << "What would you like to update?\n"
+                    "1- CLO Code \n"
+                    "2- CLO Description \n"
+                    "3- CLO Topic \n=>";
+            cin >> choice;
+            switch (choice[0])
+            {
+            case '1':
+                updateType = "code";
+                break;
+            case '2':
+                updateType = "description";
+                break;
+            case '3':
+                updateType = "topic";
+                break;
+            default:
+                validInput = false;
+                cout << "Invalid Option. Try Again.\n";
+            }
+        }
+    }
+    cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+
+    if (updateType == "code")
+    {
+
+        bool isValid = false;
+        while (!isValid)
+        {
+            cout << "Enter the new " + updateType + ": ";
+            getline(cin, inputStr);
+            if (searchCLOIndexByCode(cloData, inputStr) != (-1))
+            {
+                cout << "This CLO Code already exists in the database. Please try again with another CLO Code.\n";
+            }
+            else
+            {
+
+                cloData[idx]->setCloCode(inputStr);
+                for (auto q : cloData[idx]->getQuestions())
+                {
+                    q->setTestedCLO(cloData[idx]->getCloCode());
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        cout << "Enter the new " + updateType + ": ";
+        getline(cin, inputStr);
+        if (updateType == "description")
+        {
+            cloData[idx]->setCloDescription(inputStr);
+        }
+        else // topic
+        {
+            cloData[idx]->setCloTopic(inputStr);
+        }
+    }
+    system("cls");
+    cout << "CLO has been updated successfully!\n";
+    cloData[idx]->print();
+    system("pause");
+    system("cls");
+}
+
+void UpdatePlo(vector<PLO *> &ploData)
+{
+    // get input for what the user wants to change
+    string updateType, code, inputStr;
+    string choice = "";
+    bool validInput = false;
+    int idx;
+    displayAllObjects(ploData);
+    while (!validInput)
+    {
+        cout << "Enter code of the PLO that you want to edit:\n=>";
+        cin >> code;
+        idx = searchPLOIndexByCode(ploData, code);
+        if (idx == -1)
+        {
+            cout << "Invalid Input! Please enter a valid PLO code." << endl;
+            validInput = false;
+        }
+        else
+        {
+            validInput = true;
+            cout << "What would you like to update?\n"
+                    "1- PLO Code \n"
+                    "2- PLO Description \n";
+            cin >> choice;
+            switch (choice[0])
+            {
+            case '1':
+                updateType = "code";
+                break;
+            case '2':
+                updateType = "description";
+                break;
+            default:
+                validInput = false;
+                cout << "Invalid Option. Try Again.\n";
+            }
+        }
+    }
+    cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+
+    if (updateType == "code")
+    {
+
+        bool isValid = false;
+        while (!isValid)
+        {
+            cout << "Enter the new " + updateType + ": ";
+            getline(cin, inputStr);
+            if (searchPLOIndexByCode(ploData, inputStr) != (-1))
+            {
+                cout << "This PLO Code already exists in the database. Please try again with another PLO Code.\n";
+            }
+            else
+            {
+
+                ploData[idx]->setPLOCode(inputStr);
+                for (auto c : ploData[idx]->getCLOs())
+                {
+                    c->setPloCode(ploData[idx]->getPLOCode());
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        cout << "Enter the new " + updateType + ": ";
+        getline(cin, inputStr);
+        if (updateType == "description")
+        {
+            ploData[idx]->setPLODescription(inputStr);
+        }
+    }
+    system("cls");
+    cout << "PLO has been updated successfully!\n";
+    ploData[idx]->print();
+    system("pause");
+    system("cls");
+}
+void UpdateCourse(vector<Course *> &courseData)
+{
+    // get input for what the user wants to change
+    string updateType, code, inputStr;
+    string choice = "";
+    bool validInput = false;
+    int idx;
+    displayAllObjects(courseData);
+    while (!validInput)
+    {
+        cout << "Enter code of the Course that you want to edit:\n=>";
+        cin >> code;
+        idx = searchCourseIndexByCode(courseData, code);
+        if (idx == -1)
+        {
+            cout << "Invalid Input! Please enter a valid Course code." << endl;
+            validInput = false;
+        }
+        else
+        {
+            validInput = true;
+            cout << "What would you like to update?\n"
+                    "1- Course Code \n"
+                    "2- Course Name \n";
+            cin >> choice;
+            switch (choice[0])
+            {
+            case '1':
+                updateType = "code";
+                break;
+            case '2':
+                updateType = "name";
+                break;
+            default:
+                validInput = false;
+                cout << "Invalid Option. Try Again.\n";
+            }
+        }
+    }
+    cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+
+    if (updateType == "code")
+    {
+
+        bool isValid = false;
+        while (!isValid)
+        {
+            cout << "Enter the new " + updateType + ": ";
+            getline(cin, inputStr);
+            if (searchCourseIndexByCode(courseData, inputStr) != (-1))
+            {
+                cout << "This Course Code already exists in the database. Please try again with another Course Code.\n";
+            }
+            else
+            {
+
+                courseData[idx]->setCourseCode(inputStr);
+                for (auto c : courseData[idx]->getCLOs())
+                {
+                    c->setCourseCode(courseData[idx]->getCourseCode());
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        cout << "Enter the new " + updateType + ": ";
+        getline(cin, inputStr);
+        if (updateType == "name")
+        {
+            courseData[idx]->setCourseName(inputStr);
+        }
+    }
+    system("cls");
+    cout << "Course has been updated successfully!\n";
+    courseData[idx]->print();
+    system("pause");
+    system("cls");
+}
+
+void UpdateProgram(vector<Program *> &programData)
+{
+    // get input for what the user wants to change
+    string updateType, code, inputStr;
+    string choice = "";
+    bool validInput = false;
+    int idx;
+    displayAllObjects(programData);
+    while (!validInput)
+    {
+        cout << "Enter code of the Program that you want to edit:\n=>";
+        cin >> code;
+        idx = searchProgramIndexByCode(programData, code);
+        if (idx == -1)
+        {
+            cout << "Invalid Input! Please enter a valid Program code." << endl;
+            validInput = false;
+        }
+        else
+        {
+            validInput = true;
+            cout << "What would you like to update?\n"
+                    "1- Program Code \n"
+                    "2- Program Name \n";
+            cin >> choice;
+            switch (choice[0])
+            {
+            case '1':
+                updateType = "code";
+                break;
+            case '2':
+                updateType = "name";
+                break;
+            default:
+                validInput = false;
+                cout << "Invalid Option. Try Again.\n";
+            }
+        }
+    }
+    cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+
+    if (updateType == "code")
+    {
+
+        bool isValid = false;
+        while (!isValid)
+        {
+            cout << "Enter the new " + updateType + ": ";
+            getline(cin, inputStr);
+            if (searchProgramIndexByCode(programData, inputStr) != (-1))
+            {
+                cout << "This Program Code already exists in the database. Please try again with another Program Code.\n";
+            }
+            else
+            {
+
+                programData[idx]->setProgramCode(inputStr);
+                for (auto c : programData[idx]->getCourse())
+                {
+                    c->setProgramCode(programData[idx]->getProgramCode());
+                }
+                for (auto p : programData[idx]->getPLOs())
+                {
+                    p->setProgramCode(programData[idx]->getProgramCode());
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        cout << "Enter the new " + updateType + ": ";
+        getline(cin, inputStr);
+        if (updateType == "name")
+        {
+            programData[idx]->setProgramName(inputStr);
+        }
+    }
+    system("cls");
+    cout << "Program has been updated successfully!\n";
+    programData[idx]->print();
+    system("pause");
+    system("cls");
 }
 int main()
 {
@@ -1808,61 +2439,229 @@ int main()
     addQsandClosInEvaluations(questionData, cloData, evaluationData);
     addCoursesInTeacher(courseData, teacherData);
 
-    // SignIn(academicOfficerData);
     // SignIn(teacherData);
     // SignUp(teacherData);
 
+    //------------------------------------remaining Admin Functions
     // cout << CLOTested(cloData) << endl;
     // cout << CLOTested(courseData) << endl;
     /// CoursesInPlo(programData, ploData);
 
-    // Add Functions
+    //------------------------------------------- Add Functions
     // AddNewProgram(programData);
     // AddNewPlo(ploData, programData); // must have a mentioned
     // AddNewClo(cloData, ploData, courseData); // must have PLO and course
-
+    // AddNewCourse(courseData);
+    //----------------------------------------Add Func Teacher
     // AddCloTopic(cloData);
-
-    // Remove Functions
+    // AddEvaluation(evaluationData, "Quiz");
+    // AssociateEvaluationWithCLOs(evaluationData, questionData, cloData);
+    //----------------------------------- Remove Functions
 
     // RemoveProgram(programData);
     // get program code as input, search it to get index, erase it.
 
-    RemoveClo(cloData, evaluationData, courseData, ploData);
-    for (auto p : cloData)
-    {
-        p->print();
-    }
-    system("Pause");
-    system("cls");
+    // RemoveClo(cloData, evaluationData, courseData, ploData);
 
-    for (auto p : ploData)
-    {
-        p->print();
-    }
-    system("Pause");
-    system("cls");
-    for (auto p : courseData)
-    {
-        p->print();
-    }
-    system("Pause");
-    system("cls");
-    for (auto p : questionData)
-    {
-        p->print();
-    }
-    system("Pause");
-    system("cls");
-    for (auto p : evaluationData)
-    {
-        p->print();
-    }
-    system("Pause");
-    system("cls");
-    // RemoveClo(cloData);
-
+    //---------------------------------------Update Functions
     // Update Functions
+    // UpdateClo(cloData);
+    // UpdatePlo(ploData);
+    // UpdateCourse(courseData);
+    // UpdateProgram(programData);
+
+    int mainChoice;
+    int adminChoice;
+    int actionChoice;
+    int teacherChoice;
+    int evaluationChoice;
+
+    do
+    {
+        mainChoice = MainMenu();
+
+        switch (mainChoice)
+        {
+        case 1: // Admin
+            system("cls");
+            while (!SignIn(academicOfficerData))
+            {
+                continue;
+            }
+            do
+            {
+                adminChoice = AdminMenu();
+                switch (adminChoice)
+                {
+                case 1: // Programs
+                    do
+                    {
+                        actionChoice = ActionMenu("Program");
+                        switch (actionChoice)
+                        {
+                        case 1:
+                            AddNewProgram(programData);
+                            // prompt the user to enter the details about the program
+                            // use those details to create and object and push it into the
+                            // program data vector, then append it into the main file.
+                            break;
+                        case 2:
+                            cout << "Remove\n"; // RemoveProgram();
+                            // get the programCode from the user, go to the program data vector, delete the said vector and then replace the file data with the new updated vector.
+                            break;
+                        case 3:
+                            UpdateProgram(programData);
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            cout << "Invalid choice! Please try again." << endl;
+                        }
+                    } while (actionChoice != 0);
+                    break;
+                case 2: // Courses
+                    do
+                    {
+                        actionChoice = ActionMenu("Course");
+                        switch (actionChoice)
+                        {
+                        case 1:
+                            AddNewCourse(courseData);
+                            break;
+                        case 2:
+                            cout << "Remove\n"; // RemoveCourse();
+                            break;
+                        case 3:
+                            UpdateCourse(courseData);
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            cout << "Invalid choice! Please try again." << endl;
+                        }
+                    } while (actionChoice != 0);
+                    break;
+                case 3: // PLO
+                    do
+                    {
+                        actionChoice = ActionMenu("PLO");
+                        switch (actionChoice)
+                        {
+                        case 1:
+                            AddNewPlo(ploData, programData); // must have a mentioned
+                            break;
+                        case 2:
+                            cout << "Remove\n"; // RemovePLO();
+                            break;
+                        case 3:
+                            UpdatePlo(ploData);
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            cout << "Invalid choice! Please try again." << endl;
+                        }
+                    } while (actionChoice != 0);
+                    break;
+                case 4: // CLO
+                    do
+                    {
+                        actionChoice = ActionMenu("CLO");
+                        switch (actionChoice)
+                        {
+                        case 1:
+                            AddNewClo(cloData, ploData, courseData); // must have PLO and course
+                            break;
+                        case 2:
+                            cout << "Remove\n"; // RemoveCLO();
+                            break;
+                        case 3:
+                            UpdateClo(cloData);
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            cout << "Invalid choice! Please try again." << endl;
+                        }
+                    } while (actionChoice != 0);
+                    break;
+                case 5:
+                    cout << CLOTested(cloData) << endl;
+                    system("pause");
+                    system("cls");
+                case 6:
+                    cout << CLOTested(courseData) << endl;
+                    system("pause");
+                    system("cls");
+                case 7:
+                    CoursesInPlo(programData, ploData);
+                    system("pause");
+                    system("cls");
+                case 9:
+                    SignUp(teacherData);
+                    system("pause");
+                    system("cls");
+                case 0: // Exit
+                    break;
+                default:
+                    cout << "Invalid choice. Please try again." << endl;
+                }
+            } while (adminChoice != 0);
+            break;
+        case 2: // Teacher
+            do
+            {
+                SignIn(teacherData);
+
+                teacherChoice = TeacherMenu();
+                switch (teacherChoice)
+                {
+                case 1:
+                    AddCloTopic(cloData);
+
+                    break;
+                case 2: // Add Evaluation
+                    do
+                    {
+                        evaluationChoice = EvaluationMenu();
+                        switch (evaluationChoice)
+                        {
+                        case 1:
+                            AddEvaluation(evaluationData, "Quiz");
+                            break;
+                        case 2:
+                            AddEvaluation(evaluationData, "Exam");
+                            break;
+                        case 3:
+                            AddEvaluation(evaluationData, "Project");
+                            break;
+                        case 4:
+                            AddEvaluation(evaluationData, "Assignment");
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            cout << "Invalid choice, please try again.\n";
+                        }
+                    } while (evaluationChoice != 0);
+                    break;
+                case 3:
+                    AssociateEvaluationWithCLOs(evaluationData, questionData, cloData);
+                    break;
+                case 0: // Exit
+                    break;
+                default:
+                    cout << "Invalid choice. Please try again." << endl;
+                }
+            } while (teacherChoice != 0);
+            break;
+        case 0: // Exit
+            cout << "Exiting program..." << endl;
+            break;
+        default:
+            cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (mainChoice != 0);
 
     return 0;
 }

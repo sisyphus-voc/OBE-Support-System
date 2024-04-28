@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 int getChoice();
 int MainMenu();
 int AdminMenu();
