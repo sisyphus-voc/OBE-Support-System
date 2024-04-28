@@ -1,0 +1,6 @@
+user1,password1,John Doe,Computer Science,1234567890.
+user2,password2,Jane Smith,Mathematics,0987654321.
+user3,password3,Mike Johnson,Physics,1111111111.
+user4,password4,Sarah Johnson,Chemistry,2222222222.
+user5,password5,Emma Watson,Biology,3333333333.
+user6,password6,Tom Hanks,English,4444444444.

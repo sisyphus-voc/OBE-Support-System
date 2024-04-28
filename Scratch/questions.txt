@@ -1,4 +1,4 @@
 Question1,What is the capital of France?,CLO1.
-Question2,Who is the current president of the United States?,CLO2.
+Question2,Who is the current president of the United States?,CLO1.
 Question3,What is the largest planet in our solar system?,CLO3.
 Question4,What is the smallest country in the world?,CLO4.
