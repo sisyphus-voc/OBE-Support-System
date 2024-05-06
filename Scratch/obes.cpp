@@ -796,6 +796,10 @@ public:
         cout << "Department: " << department << endl;
         cout << "Phone Number: " << phoneNumber << endl;
     }
+    void WelcomeMessage()
+    {
+        cout << "Welcome " << academicOfficer << " !" << endl;
+    }
 };
 
 class Teacher : public User
@@ -886,6 +890,10 @@ public:
             cout << course->getCourseCode() << "\t\t("
                  << course->getCourseName() << ")" << endl;
         }
+    }
+    void WelcomeMessage()
+    {
+        cout << "Welcome " << teacherName << " !" << endl;
     }
 };
 template <typename T>
@@ -1451,7 +1459,8 @@ bool SignIn(const vector<T *> &data)
         if (item->getUsername() == username && item->getPassword() == password)
         {
             isFound = true;
-            item->print();
+            system("cls");
+            item->WelcomeMessage();
             system("pause");
             system("cls");
             break;
@@ -1520,7 +1529,6 @@ bool SignUp(vector<Teacher *> &teacherData)
     system("CLS");
     cout << "Your account has been created, " << temp->getTeacherName() << "!" << endl;
     temp->print();
-    system("Pause");
 
     return true;
 }
@@ -2390,6 +2398,155 @@ void UpdateProgram(vector<Program *> &programData)
     system("pause");
     system("cls");
 }
+
+// File output functions
+void writeQuestionsToFile(const string &filename, const vector<Question *> &questionVector)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto question : questionVector)
+    {
+        // Write each Question object to the file
+        file << question->getQuestionId() << ',' << question->getQuestionText() << ',' << question->getTestedCLO() << '.' << endl;
+    }
+
+    file.close();
+}
+void writeCLOsToFile(const string &filename, const vector<CLO *> &cloVector)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto clo : cloVector)
+    {
+        // Write each CLO object to the file
+        file << clo->getCloCode() << ',' << clo->getCloDescription() << ',' << clo->getCloTopic() << ',' << clo->getPloCode() << ',' << clo->getCourseCode() << '.' << endl;
+    }
+
+    file.close();
+}
+void writeEvaluationsToFile(const string &filename, const vector<Evaluation *> &evaluationVector)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto evaluation : evaluationVector)
+    {
+        // Write each Evaluation object to the file
+        file << evaluation->getEvaluationType() << ',' << evaluation->getEvaluationCode() << ',';
+        for (auto question : evaluation->getQuestions())
+        {
+            file << question->getQuestionId() << ',';
+        }
+        file << '.' << endl;
+    }
+
+    file.close();
+}
+void writePLOsToFile(const string &filename, const vector<PLO *> &ploVector)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto plo : ploVector)
+    {
+        // Write each PLO object to the file
+        file << plo->getPLOCode() << ',' << plo->getPLODescription() << ',' << plo->getProgramCode() << '.' << endl;
+    }
+
+    file.close();
+}
+void writeCoursesToFile(const string &filename, const vector<Course *> &courseVector)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto course : courseVector)
+    {
+        // Write each Course object to the file
+        file << course->getCourseCode() << ',' << course->getCourseName() << ',' << course->getProgramCode() << '.' << endl;
+    }
+
+    file.close();
+}
+void writeProgramsToFile(const string &filename, const vector<Program *> &programVector)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto program : programVector)
+    {
+        // Write each Program object to the file
+        file << program->getProgramCode() << ',' << program->getProgramName() << '.' << endl;
+    }
+
+    file.close();
+}
+void writeAcademicOfficersToFile(const string &filename, const vector<AcademicOfficer *> &academicOfficers)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto ao : academicOfficers)
+    {
+        // Write each AcademicOfficer object to the file
+        file << ao->getUsername() << ',' << ao->getPassword() << ',' << ao->getAcademicOfficerName() << ',' << ao->getDepartment() << ',' << ao->getPhoneNumber() << '.' << endl;
+    }
+
+    file.close();
+}
+void writeTeachersToFile(const string &filename, const vector<Teacher *> &teachers)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cerr << "Error opening file: " << filename << endl;
+        return;
+    }
+
+    for (auto teacher : teachers)
+    {
+        // Write each Teacher object to the file
+        file << teacher->getUsername() << ',' << teacher->getPassword() << ',' << teacher->getTeacherName() << ',' << teacher->getDepartment() << ',' << teacher->getPhoneNumber() << ',';
+        for (auto course : teacher->getCourses())
+        {
+            file << course->getCourseCode() << ',';
+        }
+        file << '.' << endl;
+    }
+
+    file.close();
+}
+
 int main()
 {
     // Variable Declaration
@@ -2438,37 +2595,6 @@ int main()
     addCoursesInPrograms(courseData, programData);
     addQsandClosInEvaluations(questionData, cloData, evaluationData);
     addCoursesInTeacher(courseData, teacherData);
-
-    // SignIn(teacherData);
-    // SignUp(teacherData);
-
-    //------------------------------------remaining Admin Functions
-    // cout << CLOTested(cloData) << endl;
-    // cout << CLOTested(courseData) << endl;
-    /// CoursesInPlo(programData, ploData);
-
-    //------------------------------------------- Add Functions
-    // AddNewProgram(programData);
-    // AddNewPlo(ploData, programData); // must have a mentioned
-    // AddNewClo(cloData, ploData, courseData); // must have PLO and course
-    // AddNewCourse(courseData);
-    //----------------------------------------Add Func Teacher
-    // AddCloTopic(cloData);
-    // AddEvaluation(evaluationData, "Quiz");
-    // AssociateEvaluationWithCLOs(evaluationData, questionData, cloData);
-    //----------------------------------- Remove Functions
-
-    // RemoveProgram(programData);
-    // get program code as input, search it to get index, erase it.
-
-    // RemoveClo(cloData, evaluationData, courseData, ploData);
-
-    //---------------------------------------Update Functions
-    // Update Functions
-    // UpdateClo(cloData);
-    // UpdatePlo(ploData);
-    // UpdateCourse(courseData);
-    // UpdateProgram(programData);
 
     int mainChoice;
     int adminChoice;
@@ -2586,21 +2712,42 @@ int main()
                     } while (actionChoice != 0);
                     break;
                 case 5:
-                    cout << CLOTested(cloData) << endl;
+                    system("cls");
+                    if (CLOTested(cloData))
+                    {
+                        cout << "CLO has been tested!" << endl;
+                    }
+                    else
+                        cout << "CLO has not been tested!" << endl;
                     system("pause");
                     system("cls");
+                    break;
+
                 case 6:
-                    cout << CLOTested(courseData) << endl;
+                    system("cls");
+                    if (CLOTested(courseData))
+                    {
+                        cout << "All CLOs for the given course have been tested!" << endl;
+                    }
+                    else
+                        cout << "All CLOs for the given course have not been tested!" << endl;
                     system("pause");
                     system("cls");
+                    break;
+
                 case 7:
+                    system("cls");
                     CoursesInPlo(programData, ploData);
                     system("pause");
                     system("cls");
-                case 9:
+                    break;
+                case 8:
+                    system("cls");
                     SignUp(teacherData);
                     system("pause");
                     system("cls");
+                    break;
+
                 case 0: // Exit
                     break;
                 default:
@@ -2662,6 +2809,15 @@ int main()
             cout << "Invalid choice. Please try again." << endl;
         }
     } while (mainChoice != 0);
+
+    writeQuestionsToFile(questionFile, questionData);
+    writeEvaluationsToFile(evaluationFile, evaluationData);
+    writeCLOsToFile(cloFile, cloData);
+    writePLOsToFile(ploFile, ploData);
+    writeCoursesToFile(courseFile, courseData);
+    writeProgramsToFile(programFile, programData);
+    writeAcademicOfficersToFile(academicOfficerFile, academicOfficerData);
+    writeTeachersToFile(teacherFile, teacherData);
 
     return 0;
 }

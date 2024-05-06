@@ -1,4 +1,4 @@
-Exam,Mid1,Question1,Question2,Question3.
-Exam,Final,Question3,Question4.
-Assignment,Assignment1,Question1.
-Quiz,Quiz1,Question2,Question3.
+Exam,Mid1,Question1,Question2,Question3,.
+Exam,Final,Question3,Question4,.
+Assignment,Assignment1,Question1,.
+Quiz,Quiz1,Question2,Question3,.
